@@ -10,6 +10,22 @@
 	<name>Sample maven multi-module project filled with samples</name>
 	<!-- End -->
 
+	<!-- Issue management system -->
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/agaman17/java-samples/issues</url>
+	</issueManagement>
+	
+	<!-- SCM (Software Configuration Management) -->
+	<!-- A.k.a. Source Code Management -->
+	<!-- A.k.a. Source Control Management -->
+	<scm>
+		<connection>scm:git:https://github.com/agaman17/java-samples.git</connection>
+		<developerConnection>scm:git:https://github.com/agaman17/java-samples.git</developerConnection>
+		<tag>master</tag>
+		<url>https://github.com/agaman17/java-samples</url>
+	</scm>
+
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -27,4 +43,5 @@
 		<version.org.jboss.as.plugins.maven.plugin>7.3.Final</version.org.jboss.as.plugins.maven.plugin>
 	</properties>
 
+	<url>https://github.com/agaman17/java-samples</url>
 </project>
