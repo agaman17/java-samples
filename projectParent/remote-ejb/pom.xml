@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
@@ -5,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ro.gboss</groupId>
 	<artifactId>remote-ejb</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 	<name>Remote Ejb server and client sample</name>
 	<!-- End -->
@@ -21,10 +22,13 @@
 	<modules>
 		<module>client</module>
 		<module>server</module>
+		<module>ejb-commons</module>
 	</modules>
 
 	<!-- Project properties -->
 	<properties>
+		<project.version>1.0.0</project.version>
+	
 		<!-- Explicitly declaring the source encoding eliminates the following 
 			message: -->
 		<!-- [WARNING] Using platform encoding (UTF-8 actually) to copy filtered 
@@ -45,6 +49,45 @@
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<version.org.jboss.as.plugins.maven.plugin>7.3.Final</version.org.jboss.as.plugins.maven.plugin>
+
+		<!-- Test dependencies -->
+		<junit.version>4.8.1</junit.version>
+		<maven.surefire.plugin.version>2.17</maven.surefire.plugin.version>
+		<maven.surefire.skipTests>true</maven.surefire.skipTests>
+
+		<!-- Deployment details -->
+		<jboss.as.force>true</jboss.as.force>
+		<jboss.as.skip>false</jboss.as.skip>
+		<jboss.as.hostname>192.168.56.101</jboss.as.hostname>
+		<jboss.as.port>9999</jboss.as.port>
+		<jboss.as.username>admin</jboss.as.username>
+		<jboss.as.password>123!@#aA</jboss.as.password>
+		<jboss.as.groupId>ro.gboss.remote-ejb</jboss.as.groupId>
+		<jboss.as.artifactId>ejb-server</jboss.as.artifactId>
+		<jboss.as.deploymentName>jboss-as-ejb-remote-app.jar</jboss.as.deploymentName>
 	</properties>
+
+	<!-- Test dependencies. Every subproject needs this -->
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<!-- Custom build. Surefire inclusion -->
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${maven.surefire.plugin.version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 
 </project>

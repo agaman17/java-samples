@@ -4,7 +4,7 @@
 
 	<groupId>ro.gboss.remote-ejb</groupId>
 	<artifactId>ejb-server</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${project.version}</version>
 	<packaging>ejb</packaging>
 	<name>Server side of remote EJB</name>
 
@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>ro.gboss</groupId>
 		<artifactId>remote-ejb</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0</version>
 	</parent>
 
 	<properties>
@@ -45,11 +45,23 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.jboss.as</groupId>
+				<artifactId>jboss-as-ejb-client-bom</artifactId>
+				<version>${version.org.jboss.as}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
 	<dependencies>
 
+		<dependency>
+			<groupId>ro.gboss.remote-ejb</groupId>
+			<artifactId>ejb-commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- Import the Common Annotations API (JSR-250), we use provided scope 
 			as the API is included in JBoss AS 7 -->
 		<dependency>
@@ -66,21 +78,87 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- JBoss EJB client API jar. We use runtime scope because the EJB client 
+			API isn't directly used in this example. We just need it in our runtime classpath -->
+		<dependency>
+			<groupId>org.jboss</groupId>
+			<artifactId>jboss-ejb-client</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>jboss</groupId>
+			<artifactId>jboss-client</artifactId>
+			<version>4.0.2</version>
+		</dependency>
+
+
+		<!-- client communications with the server use XNIO -->
+		<dependency>
+			<groupId>org.jboss.xnio</groupId>
+			<artifactId>xnio-api</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.xnio</groupId>
+			<artifactId>xnio-nio</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- The client needs JBoss remoting to access the server -->
+		<dependency>
+			<groupId>org.jboss.remoting3</groupId>
+			<artifactId>jboss-remoting</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Remote EJB accesses can be secured -->
+		<dependency>
+			<groupId>org.jboss.sasl</groupId>
+			<artifactId>jboss-sasl</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- data serialization for invoking remote EJBs -->
+		<dependency>
+			<groupId>org.jboss.marshalling</groupId>
+			<artifactId>jboss-marshalling-river</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<!-- Set the name of the deployment -->
 		<finalName>jboss-as-ejb-remote-app</finalName>
 		<plugins>
-			<!-- JBoss AS plugin to deploy the application -->
+			<!-- Remote deployment @ integration test -->
 			<plugin>
 				<groupId>org.jboss.as.plugins</groupId>
 				<artifactId>jboss-as-maven-plugin</artifactId>
-				<version>${version.org.jboss.as.plugins.maven.plugin}</version>
-				<configuration>
-					<filename>${project.build.finalName}.jar</filename>
-				</configuration>
+				<version>7.5.Final</version>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
+						<configuration>
+							<skip>${jboss.as.skip}</skip>
+							<!-- groupId>${jboss.as.groupId}</groupId>
+							<artifactId>${jboss.as.artifactId}</artifactId-->
+							<hostname>${jboss.as.hostname}</hostname>
+							<port>${jboss.as.port}</port>
+							<username>${jboss.as.username}</username>
+							<password>${jboss.as.password}</password>
+							<name>${jboss.as.deploymentName}</name>
+							<filename>${jboss.as.deploymentName}</filename>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
+
+			<!-- Remote undeployment @ integration test... tbd -->
+
 			<!-- Compiler plugin enforces Java 1.7 compatibility and activates annotation 
 				processors -->
 			<plugin>
@@ -101,7 +179,19 @@
 					<generateClient>true</generateClient>
 				</configuration>
 			</plugin>
-
+			<!-- Tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>integration-test</phase>
+						<configuration>
+							<skipTests>${maven.surefire.skipTests}</skipTests>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 

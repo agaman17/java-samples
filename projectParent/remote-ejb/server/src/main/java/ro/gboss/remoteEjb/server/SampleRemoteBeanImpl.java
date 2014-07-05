@@ -5,8 +5,7 @@ import javax.ejb.Stateless;
 
 @Stateless
 @Remote(SampleRemoteBean.class)
-public class SampleRemoteBeanImpl implements SampleRemoteBean 
-{
+public class SampleRemoteBeanImpl implements SampleRemoteBean {
 
 	@Override
 	public String echoWhatYouSaid(String s) {

@@ -4,7 +4,7 @@
 
 	<groupId>ro.gboss.remote-ejb</groupId>
 	<artifactId>ejb-client</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${project.version}</version>
 	<packaging>jar</packaging>
 	<name>EJB Remote Client</name>
 	<description>Java client for remote EJB</description>
@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>ro.gboss</groupId>
 		<artifactId>remote-ejb</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0</version>
 	</parent>
 
 	<dependencyManagement>
@@ -55,6 +55,11 @@
 
 	<dependencies>
 
+		<dependency>
+			<groupId>ro.gboss.remote-ejb</groupId>
+			<artifactId>ejb-commons</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- Import the transaction spec API, we use runtime scope because we aren't 
 			using any direct reference to the spec API in our client code -->
 		<dependency>
